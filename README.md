@@ -1,6 +1,6 @@
-# GitHub Griller
+# Ripper - The GitHub Griller
 
-GitHub Griller is a Gemini powered darkly humorous, Halloween/dev-themed web app
+Ripper is a Gemini powered darkly humorous, Halloween/dev-themed web app
 that lets you enter a GitHub username and get roasted with developer-centric,
 spooky jokes based on your publicly available Github Activities (repos & commits). Built with Genkit, Firebase and Angular, it features a
 modern UI, modal roast cards, and social sharing.
