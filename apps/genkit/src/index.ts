@@ -4,7 +4,7 @@ import { onCallGenkit } from 'firebase-functions/v2/https';
 import { genkit, z } from 'genkit';
 
 const githubToken = defineSecret('GITHUB_TOKEN');
-const geminiToken = defineSecret('GEMINI_TOKEN');
+const geminiApiKey = defineSecret('GEMINI_API_KEY');
 
 const ai = genkit({ plugins: [googleAI()], model: gemini20Flash });
 
@@ -36,7 +36,7 @@ const githubEventSchema = z.object({
           message: z.string(),
           distinct: z.boolean(),
           url: z.string(),
-        })
+        }),
       )
       .optional(),
   }),
@@ -66,12 +66,12 @@ const fetchGithubRepos = ai.defineTool(
           Accept: 'application/vnd.github.v3+json',
           'User-Agent': 'Genkit-Repo-Roaster-Agent', // GitHub requires a User-Agent
         },
-      }
+      },
     );
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch repos from GitHub: ${response.statusText}`
+        `Failed to fetch repos from GitHub: ${response.statusText}`,
       );
     }
 
@@ -87,7 +87,7 @@ const fetchGithubRepos = ai.defineTool(
       stargazers_count: repo.stargazers_count,
       forks: repo.forks,
     }));
-  }
+  },
 );
 
 const fetchCommitMessages = ai.defineTool(
@@ -110,12 +110,12 @@ const fetchCommitMessages = ai.defineTool(
           Accept: 'application/vnd.github.v3+json',
           'User-Agent': 'Genkit-Repo-Roaster-Agent',
         },
-      }
+      },
     );
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch commit messages from GitHub: ${response.statusText}`
+        `Failed to fetch commit messages from GitHub: ${response.statusText}`,
       );
     }
 
@@ -129,7 +129,7 @@ const fetchCommitMessages = ai.defineTool(
         .map((commit) => commit.payload.commits.map((c) => c.message))
         .flat()
     );
-  }
+  },
 );
 
 const githubGrillerFlow = ai.defineFlow(
@@ -178,12 +178,12 @@ const githubGrillerFlow = ai.defineFlow(
     console.log({ text });
 
     return text;
-  }
+  },
 );
 
 export const githubGrillerFunction = onCallGenkit(
   {
-    secrets: [githubToken, geminiToken],
+    secrets: [githubToken, geminiApiKey],
   },
-  githubGrillerFlow
+  githubGrillerFlow,
 );

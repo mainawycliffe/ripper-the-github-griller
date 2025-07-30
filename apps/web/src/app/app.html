@@ -1,0 +1,55 @@
+<div
+  class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-black text-gray-100 font-mono"
+>
+  <div
+    class="bg-gray-800 bg-opacity-80 rounded-xl shadow-2xl p-8 w-full max-w-md border-2 border-purple-700"
+  >
+    <h1 class="text-3xl font-bold text-purple-400 mb-4 flex items-center gap-2">
+      <span>🎃</span> GitHub Griller <span>💻</span>
+    </h1>
+    <p class="mb-6 text-gray-400">
+      Enter your GitHub username and get roasted!
+      <span class="italic">(Dark dev humor ahead...)</span>
+    </p>
+    <div class="flex flex-col gap-4 mb-6">
+      <input
+        type="text"
+        placeholder="GitHub username..."
+        class="px-4 py-2 rounded bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-500 border border-gray-600"
+        required
+        autocomplete="off"
+        ngModel
+        #username="ngModel"
+      />
+      <button
+        [disabled]="!username.valid || roastMutations.isPending()"
+        (click)="roastMutations.mutate(username.value)"
+        type="submit"
+        class="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 rounded transition-colors duration-200 shadow-md flex items-center justify-center gap-2"
+      >
+        @if (roastMutations.isPending()) {
+        <span class="animate-spin">🔄</span>
+        <span>Roasting...</span>
+        } @else {
+        <span>🔥 Roast Me</span>
+        <span>👻</span>
+        }
+      </button>
+    </div>
+    @let roastResult = roastMutations.data();
+
+    <!-- hello -->
+    @if (roastResult) {
+    <div
+      id="roast-result"
+      class="mt-8 text-lg text-orange-400 min-h-[3rem] font-semibold text-center"
+    >
+      <span>{{ roastResult }}</span>
+    </div>
+    }
+  </div>
+  <footer class="mt-8 text-gray-600 text-xs opacity-60">
+    Made with <span class="text-purple-400">&lt;/&gt;</span> and a dash of evil
+    by devs
+  </footer>
+</div>
