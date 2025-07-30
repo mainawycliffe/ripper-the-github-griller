@@ -40,11 +40,40 @@
 
     <!-- hello -->
     @if (roastResult) {
-    <div
-      id="roast-result"
-      class="mt-8 text-lg text-orange-400 min-h-[3rem] font-semibold text-center"
-    >
-      <span>{{ roastResult }}</span>
+    <div class="flex flex-col items-center mt-8">
+      <div
+        #roastCard
+        class="relative bg-gradient-to-br from-gray-900 via-purple-900 to-black border-4 border-orange-500 rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center animate-fade-in"
+      >
+        <div
+          class="absolute -top-6 left-1/2 -translate-x-1/2 bg-orange-500 text-black px-4 py-1 rounded-full font-bold shadow-lg text-sm flex items-center gap-2"
+        >
+          <span>🎃 Roast Card</span>
+        </div>
+        <div
+          class="text-2xl text-orange-300 font-bold my-4 flex flex-col gap-2"
+        >
+          <span class="drop-shadow-lg">{{ roastResult }}</span>
+        </div>
+        <div class="flex justify-center gap-4 mt-6">
+          <button
+            type="button"
+            (click)="downloadRoastCard()"
+            class="bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-4 rounded shadow transition-colors duration-200 flex items-center gap-2"
+            title="Download roast card"
+          >
+            <span>⬇️ Download</span>
+          </button>
+          <button
+            type="button"
+            (click)="shareRoastCard()"
+            class="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded shadow transition-colors duration-200 flex items-center gap-2"
+            title="Share on social media"
+          >
+            <span>📤 Share</span>
+          </button>
+        </div>
+      </div>
     </div>
     }
   </div>
