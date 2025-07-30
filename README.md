@@ -7,7 +7,7 @@ modern UI, modal roast cards, and social sharing.
 
 ## Try it out
 
-👉 [Live Demo](https://github-griller--github-griller.europe-west4.hosted.app/)
+👉 [Live Demo](https://ripper-the-github-griller.vercel.app/)
 
 ## Getting Started
 
