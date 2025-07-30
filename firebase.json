@@ -1,0 +1,22 @@
+{
+  "functions": [
+    {
+      "source": "dist/apps/genkit",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "yarn.lock",
+        "bun.lockb",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "pnpm nx run genkit:build",
+        "echo 'Functions built successfully.'"
+      ]
+    }
+  ]
+}

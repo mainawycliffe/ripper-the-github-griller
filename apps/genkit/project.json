@@ -1,0 +1,57 @@
+{
+  "name": "genkit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/genkit/src",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/genkit/**/*.ts"],
+        "fix": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["coverage/apps/genkit"],
+      "options": {
+        "jestConfig": "apps/genkit/jest.config.ts",
+        "passWithNoTests": true,
+        "coverageDirectory": "coverage/apps/genkit"
+      }
+    },
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "apps/genkit/src/index.ts",
+        "outputPath": "dist/apps/genkit",
+        "outputFileName": "index.js",
+        "project": "apps/genkit/package.json",
+        "tsConfig": "apps/genkit/tsconfig.json",
+        "assets": [],
+        "platform": "node",
+        "dependenciesFieldType": "dependencies",
+        "thirdParty": false,
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {
+          "minify": false
+        },
+        "production": {
+          "minify": true
+        }
+      }
+    },
+    "serve": {
+      "command": "firebase emulators:start --only functions"
+    },
+    "deploy": {
+      "command": "firebase deploy --only functions"
+    }
+  },
+  "tags": []
+}
