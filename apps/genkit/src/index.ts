@@ -1,7 +1,10 @@
+import { enableFirebaseTelemetry } from '@genkit-ai/firebase';
 import { gemini20Flash, googleAI } from '@genkit-ai/googleai';
 import { defineSecret } from 'firebase-functions/params';
 import { onCallGenkit } from 'firebase-functions/v2/https';
 import { genkit, z } from 'genkit';
+
+enableFirebaseTelemetry();
 
 const githubToken = defineSecret('GITHUB_TOKEN');
 const geminiApiKey = defineSecret('GEMINI_API_KEY');
