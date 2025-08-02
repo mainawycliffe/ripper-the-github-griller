@@ -46,3 +46,4 @@ Thumbs.db
 .angular
 .genkit
 .firebase/logs/vsce-debug.log
+firebase-debug.log
