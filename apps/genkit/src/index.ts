@@ -355,9 +355,9 @@ const githubGrillerFlow = ai.defineFlow(
           
           Your task is to write a short, funny roast of a developer based on their public GitHub profile and activity.
 
-          Be playful and clever, not truly mean (but also, don't hold back).
+          Be playful and clever, not truly mean (but also, don't hold back). Keep it short and punchy, around 3-5 sentences.
 
-          Here's the data for the user "${username}". 
+          Here's the Github Username: "${username}". 
           
           Using the provided tools, you will fetch their GitHub profile, repositories, commit messages, language statistics, and starred repositories, then roast them based on all this information.
 
@@ -394,7 +394,7 @@ const githubGrillerFlow = ai.defineFlow(
           - Inconsistent coding patterns
           - Too many "fix" commits in a row
 
-          You only have one task: roast the developer based on their GitHub activity and profile information.
+          You only have one task: roast the developer based on their GitHub activity and profile information, and keep it short and punchy, around 3-5 sentences.
 
           Return the roast as a single string, no other text or explanation needed.
       `,
