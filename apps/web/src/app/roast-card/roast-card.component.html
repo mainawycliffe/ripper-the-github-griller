@@ -4,17 +4,17 @@
 <div
   (click)="closeCard()"
   [class.hidden]="!isModalOpen()"
-  class="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black bg-opacity-80 overflow-y-auto pt-4 pb-4"
+  class="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black bg-opacity-80 overflow-y-auto pt-4 pb-4 px-2 sm:px-4"
 >
   <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
   <div
     #roastCard
     (click)="$event.stopPropagation()"
-    class="relative p-2 sm:p-8 md:p-10 bg-black bg-opacity-80 w-full box-border flex items-center justify-center"
+    class="relative p-2 sm:p-4 md:p-6 bg-black bg-opacity-80 w-full max-w-full box-border flex items-center justify-center"
   >
     <div
-      class="relative bg-gradient-to-br from-gray-900 via-purple-900 to-black border-4 border-orange-500 rounded-2xl shadow-2xl p-2 sm:p-6 w-full max-w-full sm:max-w-2xl text-center animate-fade-in box-border"
-      style="min-width: 0"
+      class="relative bg-gradient-to-br from-gray-900 via-purple-900 to-black border-4 border-orange-500 rounded-2xl shadow-2xl p-4 sm:p-6 w-full max-w-full sm:max-w-2xl md:max-w-3xl text-center animate-fade-in box-border overflow-hidden"
+      style="min-width: 0; word-wrap: break-word"
     >
       <button
         type="button"
@@ -63,9 +63,11 @@
         </span>
       </div>
       <div
-        class="text-2xl text-orange-300 font-bold my-4 flex flex-col gap-2 overflow-auto"
+        class="text-lg sm:text-xl md:text-2xl text-orange-300 font-bold my-4 flex flex-col gap-2 overflow-hidden"
       >
-        <span class="drop-shadow-lg">{{ roastResult }}</span>
+        <span class="drop-shadow-lg break-words whitespace-pre-wrap">{{
+          roastResult
+        }}</span>
       </div>
       <div class="flex justify-center gap-4 mt-6">
         <button
