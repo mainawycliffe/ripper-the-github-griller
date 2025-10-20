@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "github-griller"
-  }
+    "default": "github-griller",
+    "staging": "dr-siri"
+  },
+  "targets": {},
+  "etags": {}
 }

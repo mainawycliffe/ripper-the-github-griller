@@ -1,0 +1,52 @@
+<!-- apps/web/src/app/insight-cards/insight-cards.component.html -->
+<div class="p-6 max-w-3xl mx-auto">
+  <h2 class="text-2xl font-bold mb-4">Ripper Pro — AI Developer Insights</h2>
+
+  <div class="flex gap-2 mb-4">
+    <input
+      type="text"
+      placeholder="Enter GitHub username (e.g., torvalds)"
+      [(ngModel)]="username"
+      class="flex-1 p-2 border rounded"
+    />
+    <button (click)="analyze()" class="px-4 py-2 rounded bg-indigo-600 text-white">
+      {{ loading ? 'Analyzing...' : 'Analyze' }}
+    </button>
+  </div>
+
+  <div *ngIf="error" class="text-red-600 mb-3">{{ error }}</div>
+
+  <div *ngIf="result && result.ok" class="space-y-4">
+    <div class="bg-slate-800 text-white p-4 rounded shadow">
+      <div class="flex items-center gap-4 mb-2">
+        <img [src]="'https://github.com/' + result.profile.username + '.png?size=64'" alt="avatar" class="w-12 h-12 rounded-full" />
+        <div>
+          <div class="font-semibold text-lg">{{ result.profile.name || result.profile.username }}</div>
+          <div class="text-sm text-slate-300">{{ result.profile.bio || 'GitHub profile summary' }}</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+        <!-- Strengths card -->
+        <div class="p-4 bg-white text-slate-900 rounded">
+          <h4 class="font-bold mb-2">Strengths</h4>
+          <p class="text-sm">{{ result.insights?.strengths || result.rawAI }}</p>
+        </div>
+        <!-- Trend card -->
+        <div class="p-4 bg-white text-slate-900 rounded">
+          <h4 class="font-bold mb-2">Productivity Trend</h4>
+          <p class="text-sm">{{ result.insights?.trend || '-' }}</p>
+        </div>
+        <!-- Recommendation card -->
+        <div class="p-4 bg-white text-slate-900 rounded">
+          <h4 class="font-bold mb-2">Recommendation</h4>
+          <p class="text-sm">{{ result.insights?.recommendation || '-' }}</p>
+        </div>
+      </div>
+
+      <div class="mt-3 flex gap-2">
+        <button (click)="copySummary()" class="px-3 py-1 rounded border">Copy Summary</button>
+        <a [href]="'https://github.com/' + result.profile.username" target="_blank" class="px-3 py-1 rounded border">Open GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
