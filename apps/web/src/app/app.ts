@@ -60,6 +60,18 @@ export class App {
       emoji: '😊',
       description: 'Backhanded compliments',
     },
+    {
+      value: 'master-yoda',
+      label: '🧙 Master Yoda',
+      emoji: '🧙',
+      description: 'Backwards speak, I will',
+    },
+    {
+      value: 'kenyan-sheng',
+      label: '🇰🇪 Kenyan Sheng',
+      emoji: '🇰🇪',
+      description: 'Mbaya sana!',
+    },
   ];
 
   intensityLabels: Record<
