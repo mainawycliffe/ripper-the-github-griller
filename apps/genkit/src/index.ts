@@ -1,5 +1,5 @@
 import { enableFirebaseTelemetry } from '@genkit-ai/firebase';
-import { googleAI } from '@genkit-ai/googleai';
+import { vertexAI } from '@genkit-ai/vertexai';
 import { defineSecret } from 'firebase-functions/params';
 import { onCallGenkit } from 'firebase-functions/v2/https';
 import { genkit, z } from 'genkit';
@@ -10,8 +10,8 @@ const githubToken = defineSecret('GITHUB_TOKEN');
 const geminiApiKey = defineSecret('GEMINI_API_KEY');
 
 const ai = genkit({
-  plugins: [googleAI()],
-  model: googleAI.model('gemini-2.5-flash'),
+  plugins: [vertexAI()],
+  model: vertexAI.model('gemini-2.5-flash'),
 });
 
 const repoSchema = z.object({
