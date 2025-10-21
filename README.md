@@ -6,6 +6,7 @@
 ![Angular](https://img.shields.io/badge/Angular-20-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-Functions-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+[![Sponsor](https://img.shields.io/badge/Sponsor-💚-success?style=for-the-badge)](https://github.com/sponsors/mainawycliffe)
 
 **A darkly humorous, AI-powered roaster that tears apart developers based on their GitHub activity!** 💀
 
@@ -299,6 +300,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 - Portfolio: [mainawycliffe.dev](https://mainawycliffe.dev)
 - GitHub: [@mainawycliffe](https://github.com/mainawycliffe)
+- Sponsor: [GitHub Sponsors](https://github.com/sponsors/mainawycliffe) 💚
 
 ---
 
