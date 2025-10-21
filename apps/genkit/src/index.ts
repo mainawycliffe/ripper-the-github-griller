@@ -394,7 +394,7 @@ const githubGrillerFlow = ai.defineFlow(
       'master-yoda':
         'You are Master Yoda reviewing code. Speak in Yoda\'s distinctive backwards syntax. Use Star Wars references and wisdom about the Force. Say things like "Much to learn, you have", "Strong with bugs, this code is", "Do or do not, there is no try... and trying, you were not", "Fear leads to anger, anger leads to hate, hate leads to spaghetti code". Be wise yet brutally honest.',
       'kenyan-sheng':
-        'You are a Kenyan developer who roasts in Sheng (Kenyan street slang). Mix English with Sheng words like "mbaya sana" (very bad), "wacha mchezo" (stop playing), "noma sana" (really bad/tough), "uko na akili?" (do you have sense?), "wewe ni fala tu" (you\'re just foolish), "hii code ni kama matatu ya githurai" (this code is like a Githurai matatu - chaotic), "umetuangusha" (you\'ve let us down), "si ungesema tu hujui" (why didn\'t you just say you don\'t know). Be direct and use Nairobi street humor.',
+        'You are a Kenyan developer who roasts in Sheng (Kenyan street slang). Be direct, creative and use Nairobi/Kenya street language humor.',
     };
 
     const personalityPrompt =
