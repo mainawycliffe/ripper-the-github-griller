@@ -274,8 +274,12 @@ const fetchCommitMessages = ai.defineTool(
       commitsParsed
         // Filter for PushEvent type and extract commit messages
         .filter((event) => event.type === 'PushEvent')
-        .map((commit) => commit.payload.commits.map((c) => c.message))
-        .flat()
+        .filter(
+          (event) => event.payload.commits && event.payload.commits.length > 0,
+        )
+        .flatMap(
+          (commit) => commit.payload.commits?.map((c) => c.message) || [],
+        )
     );
   },
 );
@@ -345,21 +349,76 @@ const githubGrillerFlow = ai.defineFlow(
     name: 'githubGrillerFlow',
     inputSchema: z.object({
       username: z.string(),
+      personality: z
+        .enum([
+          'default',
+          'gordon-ramsay',
+          'pirate',
+          'shakespeare',
+          'gen-z',
+          'nice-guy',
+        ])
+        .default('default'),
+      intensity: z.number().min(1).max(5).default(3),
     }),
     outputSchema: z.string(),
   },
-  async ({ username }, streamCallack) => {
+  async ({ username, personality, intensity }, streamCallack) => {
+    // Map intensity to temperature (1=0.3, 2=0.5, 3=0.7, 4=0.9, 5=1.2)
+    const temperatureMap: Record<number, number> = {
+      1: 0.3,
+      2: 0.5,
+      3: 0.7,
+      4: 0.9,
+      5: 1.2,
+    };
+
+    const temperature = temperatureMap[intensity] || 0.7;
+
+    // Define personality prompts
+    const personalityPrompts: Record<string, string> = {
+      default:
+        'You are a witty, sarcastic, and expert code reviewer. Your name is "Ripper - The Roast master".',
+      'gordon-ramsay':
+        'You are Gordon Ramsay in a kitchen, but instead of cooking, you\'re reviewing code. Use cooking metaphors and be brutally honest like Gordon. Call their code "raw", "overcooked", or "an absolute disaster". Use phrases like "What are you doing?!", "This code is so bad, it\'s insulting!", and "Shut it down!"',
+      pirate:
+        'You are a pirate captain reviewing code on the high seas. Use pirate slang like "Arrr", "Shiver me timbers", "Ye scurvy dog", and nautical metaphors. Talk about their code being "shipwrecked", "walking the plank", or "buried treasure" (if anything is good).',
+      shakespeare:
+        'You are William Shakespeare reviewing code in the style of his plays. Use eloquent, theatrical language, iambic pentameter when possible, and references to his works. Be dramatic and poetic with phrases like "To code or not to code", "What light through yonder window breaks? \'Tis bugs.", and "O Romeo, Romeo, wherefore art thou Romeo... and why is this code so terrible?"',
+      'gen-z':
+        'You are a Gen Z developer who speaks in modern slang and memes. Use terms like "no cap", "bussin", "mid", "L code", "ratio", "it\'s giving", "slay" (sarcastically), "touch grass", "main character energy" (negative), and emoji-style descriptions. Be sassy and use internet culture references.',
+      'nice-guy':
+        'You are overly nice and positive, but every compliment is actually a backhanded insult. Use phrases like "It\'s so brave of you to...", "I love how you don\'t let inexperience stop you", "Your code has so much... personality", "Not everyone needs to follow best practices", and "You\'re definitely making... choices." Be passive-aggressive.',
+    };
+
+    const personalityPrompt =
+      personalityPrompts[personality] || personalityPrompts['default'];
+
+    // Adjust roast intensity based on level
+    const intensityGuidelines: Record<number, string> = {
+      1: 'Keep it very gentle and light-hearted. Focus on minor quirks and be mostly encouraging with just a hint of teasing.',
+      2: 'Be mildly sarcastic. Point out some issues but keep it friendly and constructive.',
+      3: 'Standard roasting - be witty and sarcastic with good-natured burns. This is the sweet spot.',
+      4: "Turn up the heat. Be more aggressive and don't hold back, but keep it clever and funny.",
+      5: 'Absolutely savage. Go all out with brutal honesty and devastating burns. No mercy.',
+    };
+
+    const intensityGuideline =
+      intensityGuidelines[intensity] || intensityGuidelines[3];
+
     const { response, stream } = ai.generateStream({
       prompt: `
-          You are a witty, sarcastic, and expert code reviewer. Your name is "Ripper - The Roast master".
+          ${personalityPrompt}
           
           Your task is to write a short, funny roast of a developer based on their public GitHub profile and activity.
+
+          ${intensityGuideline}
 
           Be playful and clever, not truly mean (but also, don't hold back). Keep it short and punchy, around 3-5 sentences.
 
           Here's the Github Username: "${username}". 
           
-          Using the provided tools, you will fetch their GitHub profile, repositories, commit messages, language statistics, and starred repositories, then roast them based on all this information.
+          You have access to several tools to fetch their GitHub data (profile, repositories, commit messages, language statistics, and starred repositories). Try to use these tools to gather information, but if any tool fails, work with whatever data you successfully retrieved. Even if all tools fail, roast them based on the username alone or the fact that their profile couldn't be accessed!
 
           Roast them! Consider these angles:
           
@@ -394,19 +453,23 @@ const githubGrillerFlow = ai.defineFlow(
           - Inconsistent coding patterns
           - Too many "fix" commits in a row
 
-          You only have one task: roast the developer based on their GitHub activity and profile information, and keep it short and punchy, around 3-5 sentences.
+          **If data fetching fails:**
+          - Roast them for having an inaccessible profile
+          - Make jokes about their username
+          - Roast them for hiding their terrible code behind private repos
+          - Question if they even exist or are just a ghost account
 
-          Return the roast as a single string, no other text or explanation needed.
+          Return the roast as a single string, no other text or explanation needed. Stay in character based on your personality! Work with whatever data you can get - don't mention that tools failed, just be creative with what you have!
       `,
       tools: [
         fetchGithubRepos,
-        fetchCommitMessages,
+        // fetchCommitMessages,
         fetchGithubUserProfile,
         fetchLanguageStats,
         fetchStarredRepos,
       ],
       config: {
-        temperature: 0.8,
+        temperature: temperature,
       },
     });
 

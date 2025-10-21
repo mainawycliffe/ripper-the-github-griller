@@ -6,15 +6,21 @@
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/genkit/**/*.ts"],
+        "lintFilePatterns": [
+          "apps/genkit/**/*.ts"
+        ],
         "fix": true
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/apps/genkit"],
+      "outputs": [
+        "coverage/apps/genkit"
+      ],
       "options": {
         "jestConfig": "apps/genkit/jest.config.ts",
         "passWithNoTests": true,
@@ -23,7 +29,9 @@
     },
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "main": "apps/genkit/src/index.ts",
@@ -35,7 +43,8 @@
         "platform": "node",
         "dependenciesFieldType": "dependencies",
         "thirdParty": false,
-        "generatePackageJson": true
+        "generatePackageJson": true,
+        "generateLockfile": false
       },
       "configurations": {
         "development": {

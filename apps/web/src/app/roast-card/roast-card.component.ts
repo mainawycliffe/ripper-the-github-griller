@@ -3,9 +3,12 @@ import { Component, ElementRef, input, output, viewChild } from '@angular/core';
 @Component({
   selector: 'app-roast-card',
   templateUrl: './roast-card.component.html',
+  standalone: true,
 })
 export class RoastCardComponent {
   results = input.required<string>();
+  personality = input<string>('🎃');
+  intensityEmoji = input<string>('🔥');
   roastCardRef = viewChild<ElementRef<HTMLDivElement>>('roastCard');
 
   isModalOpen = input.required<boolean>();
@@ -43,7 +46,16 @@ export class RoastCardComponent {
             const file = new File([blob], 'github-roast-card.png', {
               type: 'image/png',
             });
-            (navigator as any).share({
+
+            interface NavigatorWithShare extends Navigator {
+              share(data: {
+                title: string;
+                text: string;
+                files: File[];
+              }): Promise<void>;
+            }
+
+            (navigator as NavigatorWithShare).share({
               title: 'GitHub Griller Roast',
               text: 'Check out my roast from GitHub Griller! 🎃',
               files: [file],

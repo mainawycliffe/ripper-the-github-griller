@@ -1,164 +1,256 @@
 <div
-  class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-black text-gray-100 font-mono p-3"
+  class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden"
 >
-  <div
-    class="bg-gray-800 bg-opacity-80 rounded-xl shadow-2xl p-8 w-full max-w-2xl border-2 border-purple-700"
-  >
-    <h1
-      class="text-3xl font-bold text-purple-400 mb-4 py-3 flex items-center justify-center gap-2"
+  <!-- Animated background elements -->
+  <div class="fixed inset-0 pointer-events-none">
+    <!-- Floating orbs -->
+    <div
+      class="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-600/20 rounded-full animate-pulse-glow"
+    ></div>
+    <div
+      class="absolute bottom-1/3 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full animate-pulse-glow"
+      style="animation-delay: 2s"
+    ></div>
+    <div
+      class="absolute top-1/2 right-1/3 w-64 h-64 bg-teal-500/20 rounded-full animate-pulse-glow"
+      style="animation-delay: 4s"
+    ></div>
+
+    <!-- Floating ghost/spirit elements -->
+    <div class="absolute top-20 right-10 text-6xl opacity-20 animate-float">
+      👻
+    </div>
+    <div
+      class="absolute bottom-32 left-20 text-5xl opacity-20 animate-float"
+      style="animation-delay: 1s"
     >
-      <span class="w-10 h-10">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="16" cy="18" rx="12" ry="10" fill="#F97316" />
-          <ellipse cx="16" cy="18" rx="8" ry="7" fill="#FDBA74" />
+      🕷️
+    </div>
+    <div
+      class="absolute top-1/3 left-10 text-4xl opacity-20 animate-float"
+      style="animation-delay: 2.5s"
+    >
+      🦇
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div
+    class="trickster-card w-full max-w-2xl p-8 md:p-12 relative z-10 animate-scale-in"
+  >
+    <!-- Header with animated pumpkin -->
+    <div class="text-center mb-8">
+      <div class="mb-4">
+        <svg
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-20 h-20 animate-wiggle drop-shadow-2xl"
+        >
+          <ellipse cx="16" cy="18" rx="12" ry="10" fill="#10B981" />
+          <ellipse cx="16" cy="18" rx="8" ry="7" fill="#6EE7B7" />
           <path
             d="M12 13c.5-2 2-5 4-5s3.5 3 4 5"
-            stroke="#78350F"
+            stroke="#064E3B"
             stroke-width="1.5"
             fill="none"
           />
-          <ellipse cx="12" cy="19" rx="1.5" ry="2" fill="#78350F" />
-          <ellipse cx="20" cy="19" rx="1.5" ry="2" fill="#78350F" />
+          <ellipse cx="12" cy="19" rx="1.5" ry="2" fill="#064E3B" />
+          <ellipse cx="20" cy="19" rx="1.5" ry="2" fill="#064E3B" />
           <path
             d="M14 23c1 1 3 1 4 0"
-            stroke="#78350F"
+            stroke="#064E3B"
             stroke-width="1.5"
             fill="none"
           />
         </svg>
-      </span>
-      <span> Ripper - The Github Griller </span>
-    </h1>
-    <p class="mb-6 text-white font-semibold text-center py-3">
-      Enter your GitHub username and get roasted!
-      <span class="italic">(Dark dev humor ahead...)</span>
-    </p>
-    <div class="flex flex-col gap-4 mb-6">
-      <input
-        type="text"
-        placeholder="GitHub username..."
-        class="px-4 py-2 rounded bg-gray-700 text-lg font-semibold text-white focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-white border border-gray-600"
-        required
-        autocomplete="off"
-        ngModel
-        #username="ngModel"
-      />
+      </div>
+
+      <h1
+        class="creepy-title text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 mb-3 animate-glow"
+      >
+        Ripper
+      </h1>
+      <p class="text-xl md:text-2xl font-bold text-cyan-400 mb-2">
+        The GitHub Griller
+      </p>
+      <p class="text-gray-400 text-sm md:text-base italic">
+        Enter a GitHub username... if you dare 😈
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="submitRoast()" class="space-y-6">
+      <!-- Username Input -->
+      <div class="space-y-2">
+        <label
+          for="github-username"
+          class="flex items-center gap-2 text-sm font-semibold text-emerald-300"
+        >
+          <span class="text-xl">👤</span>
+          GitHub Username
+        </label>
+        <input
+          id="github-username"
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="e.g., octocat"
+          class="trickster-input w-full text-lg"
+          required
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Personality Selector -->
+      <div class="space-y-2">
+        <div
+          class="flex items-center gap-2 text-sm font-semibold text-emerald-300"
+        >
+          <span class="text-xl">🎭</span>
+          Roast Personality
+        </div>
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+          @for (personality of personalities; track personality.value) {
+          <button
+            type="button"
+            (click)="selectedPersonality.set(personality.value)"
+            [class]="selectedPersonality() === personality.value 
+                ? 'bg-gradient-to-br from-emerald-600 to-cyan-500 border-emerald-400 shadow-lg scale-105' 
+                : 'bg-slate-800/50 border-emerald-500/30 hover:border-cyan-400 hover:scale-102'"
+            class="border-2 rounded-lg p-2 transition-all duration-300 transform hover:shadow-xl group"
+          >
+            <div
+              class="text-2xl mb-1 group-hover:scale-110 transition-transform"
+            >
+              {{ personality.emoji }}
+            </div>
+            <div class="text-[10px] font-semibold text-white leading-tight">
+              {{ personality.description }}
+            </div>
+          </button>
+          }
+        </div>
+      </div>
+
+      <!-- Intensity Slider -->
+      <div class="space-y-3">
+        <label
+          for="intensity-slider"
+          class="flex items-center gap-2 text-sm font-semibold text-emerald-300"
+        >
+          <span class="text-xl">🔥</span>
+          Roast Intensity
+        </label>
+
+        <div class="relative pt-6 pb-2">
+          <!-- Current intensity indicator -->
+          <div class="text-center mb-4">
+            <span class="text-4xl">{{ getIntensityInfo().emoji }}</span>
+            <p [class]="'text-lg font-bold mt-2 ' + getIntensityInfo().color">
+              {{ getIntensityInfo().label }}
+            </p>
+          </div>
+
+          <!-- Custom slider -->
+          <input
+            id="intensity-slider"
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+            [(ngModel)]="intensity"
+            name="intensity"
+            class="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-emerald-500 [&::-webkit-slider-thumb]:to-cyan-500 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:hover:scale-110 [&::-webkit-slider-thumb]:transition-transform"
+          />
+
+          <!-- Slider labels -->
+          <div class="flex justify-between mt-2 text-xs text-gray-500">
+            <span>😊 Gentle</span>
+            <span>�� Savage</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
       <button
-        [disabled]="!username.valid || roastMutations.isPending()"
-        (click)="roastMutations.mutate(username.value)"
         type="submit"
-        class="bg-purple-700 hover:bg-purple-900 text-white cursor-pointer font-bold py-2 rounded transition-colors duration-200 shadow-md flex items-center justify-center gap-2"
+        [disabled]="!username().trim() || roastMutations.isPending()"
+        class="trickster-button w-full text-xl py-4 flex items-center justify-center gap-3 group"
       >
         @if (roastMutations.isPending()) {
-        <span class="animate-spin">
-          <!-- Spinning gear SVG -->
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24">
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="#a78bfa"
-              stroke-width="4"
-            />
-            <path
-              class="opacity-75"
-              fill="#a78bfa"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="0 12 12"
-                to="360 12 12"
-                dur="1s"
-                repeatCount="indefinite"
-              />
-            </path>
-          </svg>
-        </span>
-        <span>Roasting...</span>
+        <svg
+          class="animate-spin h-6 w-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        <span>Cooking up your roast...</span>
         } @else {
-        <span class="flex items-center gap-2">
-          <!-- Fire SVG -->
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 2C12 2 7 8 7 13a5 5 0 0010 0c0-5-5-11-5-11z"
-              fill="#f59e42"
-            />
-            <path
-              d="M12 2C12 2 9 7 9 13a3 3 0 006 0c0-6-3-11-3-11z"
-              fill="#fbbf24"
-            />
-          </svg>
-          Roast Me
-          <!-- Ghost SVG -->
-          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 3c-4.418 0-8 3.582-8 8v7c0 1.104.896 2 2 2 .828 0 1.578-.5 1.895-1.267A2.001 2.001 0 0012 21a2.001 2.001 0 003.105-1.267A2.001 2.001 0 0018 20c1.104 0 2-.896 2-2v-7c0-4.418-3.582-8-8-8z"
-              fill="#f3f4f6"
-            />
-            <circle cx="9" cy="13" r="1" fill="#18181b" />
-            <circle cx="15" cy="13" r="1" fill="#18181b" />
-          </svg>
-        </span>
+        <span class="text-3xl group-hover:animate-wiggle">🔥</span>
+        <span>Roast Me!</span>
+        <span class="text-3xl group-hover:animate-wiggle">💀</span>
         }
       </button>
-    </div>
-    @let roastResult = roastMutations.data();
-
-    <!-- hello -->
-    @if (roastResult) {
-    <app-roast-card
-      [results]="roastResult"
-      [isModalOpen]="isRoastCardOpen()"
-      (modalClosed)="closeRoastCard()"
-    />
-    }
+    </form>
   </div>
-  <footer
-    class="mt-8 text-white font-semibold text-center flex flex-col items-center gap-2"
-  >
-    <div>
-      Made with <span class="text-purple-400">&lt;/&gt;</span> and a dash of
-      evil by Maina Wycliffe
-    </div>
+
+  <!-- Roast Card Modal -->
+  @let roastResult = roastMutations.data(); @if (roastResult) {
+  <app-roast-card
+    [results]="roastResult"
+    [isModalOpen]="isRoastCardOpen()"
+    [personality]="getSelectedPersonality().emoji"
+    [intensityEmoji]="getIntensityInfo().emoji"
+    (modalClosed)="closeRoastCard()"
+  />
+  }
+
+  <!-- Footer -->
+  <footer class="mt-12 text-center relative z-10 space-y-4">
+    <p class="text-gray-400 text-sm">
+      Made with <span class="text-emerald-400 animate-pulse">💚</span> and a
+      dash of evil by
+      <a
+        href="https://mainawycliffe.dev"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline transition-colors"
+      >
+        Maina Wycliffe
+      </a>
+    </p>
+
+    <a
+      href="https://github.com/mainawycliffe/github-griller"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/80 border-2 border-emerald-500/30 rounded-full hover:border-cyan-400 transition-all duration-300 hover:shadow-lg hover:scale-105 group"
+    >
+      <svg
+        class="w-5 h-5 group-hover:rotate-12 transition-transform"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.687-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.594 1.028 2.687 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .267.18.577.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"
+        />
+      </svg>
+      <span class="text-sm font-semibold">View Source</span>
+    </a>
   </footer>
-
-  <!-- None floating GitHub repo link -->
-
-  <a
-    href="https://github.com/mainawycliffe/github-griller"
-    target="_blank"
-    class="flex md:hidden items-center justify-center gap-2 my-4"
-  >
-    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-      <path
-        d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.687-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.594 1.028 2.687 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .267.18.577.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"
-      />
-    </svg>
-
-    View on GitHub
-  </a>
-
-  <!-- Floating GitHub repo link -->
-  <a
-    href="https://github.com/mainawycliffe/github-griller"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="hidden fixed bottom-5 right-5 z-50 bg-black bg-opacity-95 border-2 border-orange-400 rounded-full shadow-2xl p-5 md:flex items-center justify-center text-orange-300 hover:text-white hover:bg-orange-500 transition-colors duration-200 animate-pulse"
-    title="View on GitHub"
-    aria-label="View on GitHub"
-    style="
-      box-shadow:
-        0 0 24px 4px #f59e42,
-        0 2px 8px 0 #000;
-    "
-  >
-    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-      <path
-        d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.687-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.594 1.028 2.687 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .267.18.577.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"
-      />
-    </svg>
-  </a>
 </div>
