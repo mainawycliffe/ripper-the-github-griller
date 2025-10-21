@@ -7,7 +7,6 @@ import { genkit, z } from 'genkit';
 enableFirebaseTelemetry();
 
 const githubToken = defineSecret('GITHUB_TOKEN');
-const geminiApiKey = defineSecret('GEMINI_API_KEY');
 
 const ai = genkit({
   plugins: [vertexAI()],
@@ -492,7 +491,7 @@ const githubGrillerFlow = ai.defineFlow(
 
 export const githubGrillerFunction = onCallGenkit(
   {
-    secrets: [githubToken, geminiApiKey],
+    secrets: [githubToken],
   },
   githubGrillerFlow,
 );
