@@ -365,6 +365,18 @@ const githubGrillerFlow = ai.defineFlow(
     outputSchema: z.string(),
   },
   async ({ username, personality, intensity }, streamCallack) => {
+    // First, check if the user exists
+    const userCheckResponse = await fetch(
+      `https://api.github.com/users/${username}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          Accept: 'application/vnd.github.v3+json',
+          'User-Agent': 'Genkit-Repo-Roaster-Agent',
+        },
+      },
+    );
+
     // Map intensity to temperature (1=0.3, 2=0.5, 3=0.7, 4=0.9, 5=1.2)
     const temperatureMap: Record<number, number> = {
       1: 0.3,
@@ -411,6 +423,39 @@ const githubGrillerFlow = ai.defineFlow(
     const intensityGuideline =
       intensityGuidelines[intensity] || intensityGuidelines[3];
 
+    // If user not found, have the LLM generate a roast about the non-existent user
+    if (userCheckResponse.status === 404) {
+      const { response, stream } = ai.generateStream({
+        prompt: `
+          ${personalityPrompt}
+          
+          ${intensityGuideline}
+          
+          The user tried to get roasted but entered a username "${username}" that doesn't exist on GitHub (404 error).
+          
+          Roast them for this mistake! Make it funny and creative. Consider these angles:
+          - They can't even type a username correctly
+          - They're trying to roast a ghost/imaginary person
+          - The irony of failing at getting roasted
+          - Suggest they check their spelling but in a sarcastic way
+          
+          Keep it short and punchy (2-3 sentences). Stay in character based on your personality! Use emojis like 💀🎃👻🤦🔥 to keep the Halloween theme.
+        `,
+        config: {
+          temperature: temperature,
+        },
+        model: vertexAI.model('gemini-2.0-flash-exp'),
+      });
+
+      for await (const chunk of stream) {
+        streamCallack(chunk);
+      }
+
+      const { text } = await response;
+      return text;
+    }
+
+    // Continue with normal roasting flow for valid users
     const { response, stream } = ai.generateStream({
       prompt: `
           ${personalityPrompt}
